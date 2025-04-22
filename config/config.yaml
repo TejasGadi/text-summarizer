@@ -1,0 +1,10 @@
+# For every module/component i.e. data ingestion for example, we define some config yaml like artifacts path,dataset url etc
+
+# Output path of all components artifacts
+artifacts_root: artifacts
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_url: https://github.com/krishnaik06/datasets/raw/refs/heads/main/summarizer-data.zip
+  local_dataset_zip_file: artifacts/data_ingestion/data.zip
+  unzip_dir: artifacts/data_ingestion
