@@ -1,6 +1,6 @@
 from src.textSummarizer.constants import *
 from src.textSummarizer.utils.common import create_directories,read_yaml
-from src.textSummarizer.config_entity import DataIngestionConfig
+from src.textSummarizer.config_entity import DataIngestionConfig, DataTransformationConfig
 from box import ConfigBox
 
 # Create Configuration Manager: This has basic information required before staring any module/components
@@ -30,3 +30,16 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+
+    def get_data_transformation_config(self)->DataTransformationConfig:
+        config = self.config.data_transformation
+
+        create_directories([config.root_dir])
+
+        data_transformation_config = DataTransformationConfig(
+            root_dir=config.root_dir,
+            data_path=config.data_path,
+            tokenizer_name=config.tokenizer_name
+        ) 
+
+        return data_transformation_config
