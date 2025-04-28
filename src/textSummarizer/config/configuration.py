@@ -1,6 +1,6 @@
 from src.textSummarizer.constants import *
 from src.textSummarizer.utils.common import create_directories,read_yaml
-from src.textSummarizer.config_entity import DataIngestionConfig, DataTransformationConfig
+from src.textSummarizer.config_entity import DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig
 from box import ConfigBox
 
 # Create Configuration Manager: This has basic information required before staring any module/components
@@ -43,3 +43,25 @@ class ConfigurationManager:
         ) 
 
         return data_transformation_config
+
+    def get_model_trainer_config(self)->ModelTrainerConfig:
+        config = self.config.model_trainer
+
+        create_directories([config.root_dir])
+
+        model_trainer_config = ModelTrainerConfig(
+            root_dir=config.root_dir,
+            data_path=config.data_path,
+            model_ckpt=config.model_ckpt,
+            num_train_epochs=self.params.num_train_epochs,
+            warmup_steps=self.params.warmup_steps,
+            per_device_train_batch_size=self.params.per_device_train_batch_size,
+            weight_decay=self.params.weight_decay,
+            logging_steps=self.params.logging_steps,
+            eval_strategy=self.params.eval_strategy,
+            eval_steps=self.params.eval_steps,
+            save_steps=self.params.save_steps,
+            gradient_accumulation_steps=self.params.gradient_accumulation_steps
+        )
+
+        return model_trainer_config
