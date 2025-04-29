@@ -1,6 +1,6 @@
 from src.textSummarizer.constants import *
 from src.textSummarizer.utils.common import create_directories,read_yaml
-from src.textSummarizer.config_entity import DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig
+from src.textSummarizer.config_entity import DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig
 from box import ConfigBox
 
 # Create Configuration Manager: This has basic information required before staring any module/components
@@ -46,6 +46,7 @@ class ConfigurationManager:
 
     def get_model_trainer_config(self)->ModelTrainerConfig:
         config = self.config.model_trainer
+        params = self.params.TrainingArguments
 
         create_directories([config.root_dir])
 
@@ -53,15 +54,30 @@ class ConfigurationManager:
             root_dir=config.root_dir,
             data_path=config.data_path,
             model_ckpt=config.model_ckpt,
-            num_train_epochs=self.params.num_train_epochs,
-            warmup_steps=self.params.warmup_steps,
-            per_device_train_batch_size=self.params.per_device_train_batch_size,
-            weight_decay=self.params.weight_decay,
-            logging_steps=self.params.logging_steps,
-            eval_strategy=self.params.eval_strategy,
-            eval_steps=self.params.eval_steps,
-            save_steps=self.params.save_steps,
-            gradient_accumulation_steps=self.params.gradient_accumulation_steps
+            num_train_epochs=params.num_train_epochs,
+            warmup_steps=params.warmup_steps,
+            per_device_train_batch_size=params.per_device_train_batch_size,
+            weight_decay=params.weight_decay,
+            logging_steps=params.logging_steps,
+            eval_strategy=params.eval_strategy,
+            eval_steps=params.eval_steps,
+            save_steps=params.save_steps,
+            gradient_accumulation_steps=params.gradient_accumulation_steps
         )
 
         return model_trainer_config
+
+    def get_model_evaluation_config(self)->ModelEvaluationConfig:
+        config = self.config.model_evaluation
+
+        create_directories([config.root_dir])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_dir = config.root_dir,
+            data_path = config.data_path,
+            model_path = config.model_path,
+            tokenizer_path = config.tokenizer_path,
+            metric_file_path =  config.metric_file_path,
+        )
+
+        return model_evaluation_config
